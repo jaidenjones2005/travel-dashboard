@@ -97,10 +97,9 @@ class TravelHomePage extends StatelessWidget {
       ),
     ];
 
-    // Measure the window width
+    // Window-level measurement
     final double width = MediaQuery.sizeOf(context).width;
 
-    // Choose the correct layout
     if (width < 600) {
       return const MobileLayout(
         destinations: destinations,
@@ -144,13 +143,10 @@ class MobileLayout extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Travel Dashboard'),
       ),
-      body: Center(
-        child: Text(
-          'Tropical Beach',
-          style: Theme.of(context).textTheme.displayLarge,
-          textAlign: TextAlign.center,
-        ),
-      ),
+
+      // Phase 3 content
+      body: const DealDashboard(),
+
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: navItems,
@@ -198,16 +194,117 @@ class DesktopLayout extends StatelessWidget {
               children: navItems,
             ),
           ),
-          Expanded(
-            child: Center(
-              child: Text(
-                'Tropical Beach',
-                style: Theme.of(context).textTheme.displayLarge,
-                textAlign: TextAlign.center,
-              ),
-            ),
+
+          // Phase 3 content
+          const Expanded(
+            child: DealDashboard(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// --------------------
+// DEAL DASHBOARD
+// --------------------
+
+class DealDashboard extends StatelessWidget {
+  const DealDashboard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    const List<TravelDeal> deals = [
+      TravelDeal(
+        title: 'Beach Getaway',
+        price: 499.99,
+        description: 'Enjoy a relaxing trip to a tropical beach.',
+        isPremium: false,
+      ),
+      TravelDeal(
+        title: 'Mountain Adventure',
+        price: 699.99,
+        description: 'Explore the mountains and enjoy the outdoors.',
+        isPremium: false,
+      ),
+      TravelDeal(
+        title: 'City Escape',
+        price: 399.99,
+        description: 'Experience an exciting weekend in the city.',
+        isPremium: false,
+      ),
+      TravelDeal(
+        title: 'Island Vacation',
+        price: 899.99,
+        description: 'Spend your vacation on a beautiful island.',
+        isPremium: true,
+      ),
+    ];
+
+    List<Widget> dealCards = [];
+
+    for (TravelDeal deal in deals) {
+      dealCards.add(
+        DealCard(deal: deal),
+      );
+    }
+
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Widget-level responsive breakpoint
+          if (constraints.maxWidth > 400) {
+            return GridView.count(
+              crossAxisCount: 2,
+              padding: const EdgeInsets.all(16),
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              children: dealCards,
+            );
+          } else {
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: dealCards,
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+// --------------------
+// DEAL CARD
+// --------------------
+
+class DealCard extends StatelessWidget {
+  final TravelDeal deal;
+
+  const DealCard({
+    super.key,
+    required this.deal,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              deal.title,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '\$${deal.price.toStringAsFixed(2)}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
       ),
     );
   }

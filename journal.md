@@ -19,3 +19,14 @@ MediaQuery can be used to check the width and height of the screen and
 change the layout based on the available space. It could also be used to
 adjust things like font sizes, spacing, padding, or the number of items
 displayed on the screen.
+
+# Phase 3 - Responsive Content
+
+We are using LayoutBuilder instead of MediaQuery because LayoutBuilder
+measures the space available to a specific widget. MediaQuery measures
+the size of the overall screen or window.
+
+This is useful for DealDashboard because the desktop navigation panel
+takes up some of the screen width. LayoutBuilder lets the dashboard
+respond to the space it actually receives instead of assuming it has
+the entire window.
