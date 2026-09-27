@@ -30,3 +30,14 @@ This is useful for DealDashboard because the desktop navigation panel
 takes up some of the screen width. LayoutBuilder lets the dashboard
 respond to the space it actually receives instead of assuming it has
 the entire window.
+# Phase 4 - Premium Override
+
+I would prefer using ThemeData for specialized widgets because it keeps
+the styling organized and makes it easier to change the design later.
+It also allows the widget to continue using the same typography and
+other theme settings from the rest of the application.
+
+The downside is that using ThemeData can be more complicated than
+hard-coding a color directly into a widget. However, hard-coded values
+can become difficult to maintain because the same values may be repeated
+in many different places throughout the app.

@@ -77,7 +77,6 @@ class TravelHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Centralized navigation data
     const List<Destination> destinations = [
       Destination(
         name: 'Home',
@@ -97,7 +96,6 @@ class TravelHomePage extends StatelessWidget {
       ),
     ];
 
-    // Window-level measurement
     final double width = MediaQuery.sizeOf(context).width;
 
     if (width < 600) {
@@ -143,10 +141,7 @@ class MobileLayout extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Travel Dashboard'),
       ),
-
-      // Phase 3 content
       body: const DealDashboard(),
-
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: navItems,
@@ -194,8 +189,6 @@ class DesktopLayout extends StatelessWidget {
               children: navItems,
             ),
           ),
-
-          // Phase 3 content
           const Expanded(
             child: DealDashboard(),
           ),
@@ -244,15 +237,27 @@ class DealDashboard extends StatelessWidget {
     List<Widget> dealCards = [];
 
     for (TravelDeal deal in deals) {
-      dealCards.add(
-        DealCard(deal: deal),
-      );
+      Widget card = DealCard(deal: deal);
+
+      // Phase 4: Local theme override for premium deals
+      if (deal.isPremium) {
+        card = Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.deepOrange,
+              brightness: Brightness.light,
+            ),
+          ),
+          child: card,
+        );
+      }
+
+      dealCards.add(card);
     }
 
     return SafeArea(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          // Widget-level responsive breakpoint
           if (constraints.maxWidth > 400) {
             return GridView.count(
               crossAxisCount: 2,
@@ -288,6 +293,7 @@ class DealCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.primaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -302,6 +308,12 @@ class DealCard extends StatelessWidget {
             Text(
               '\$${deal.price.toStringAsFixed(2)}',
               style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              deal.description,
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
             ),
           ],
         ),
